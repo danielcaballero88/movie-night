@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Base Title{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/login/">Login</a></li>
+                <li><a href="/logout/">Logout</a></li>
+                <li><a href="/user/">User</a></li>
+                <li><a href="/pelist/">PeList</a></li>
+            </ul>
+            <ul>
+                <li><a href="/about/">About</a></li>
+                <li><a href="/contact/">Contact</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <!-- Display flash messages first, if any -->
+            {% block flashmessages %}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for msg in messages %}
+                            <p>{{ msg }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            {% endblock %}
+            <!-- Main content here -->
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
