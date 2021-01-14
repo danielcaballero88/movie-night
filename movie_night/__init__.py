@@ -1,9 +1,5 @@
 """Initialize Flask app."""
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-# Global database variable
-db = SQLAlchemy()
 
 def create_app():
     """Create Flask application."""
@@ -12,16 +8,17 @@ def create_app():
     # Import configuration from config file
     app.config.from_object("config.DevConfig")
     # Initialize database
+    from .database import db
     db.init_app(app)
     #
     with app.app_context():
         # Register Blueprints
         from .home import home_bp
         from .auth import auth_bp
-        from .user import user_bp
+        from .movies import movies_bp
         app.register_blueprint(home_bp)
         app.register_blueprint(auth_bp)
-        app.register_blueprint(user_bp, url_prefix="/user/")
+        app.register_blueprint(movies_bp, url_prefix="/movies/")
         # Create tables (only the first time?)
         db.create_all()
         # Done

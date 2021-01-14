@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+User page
+{% endblock %}
+
+{% block content %}
+<h1>Welcome {{user.name}}</h1>
+<h2>Your pelis:</h2>
+
+<div class="list-pelis">
+    <ul>
+        {% for movie in user.movies %}
+            <li>
+                <p>{{ movie.name }}</p>
+                <form action="{{ url_for('.del_movie') }}" method="POST">
+                    <input type=hidden value="{{ movie.name }}" name="movie2del" />
+                    <input type="submit" value="Del" />
+                </form>
+            </li>
+        {% endfor%}
+    </ul>
+</div>
+<h2><a href='{{ url_for(".add_movie") }}'>Add a movie?</a></h2>
+{% endblock %}

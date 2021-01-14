@@ -6,6 +6,7 @@
         "--load-plugins",
         "pylint_flask_sqlalchemy",
         "pylint_flask",
+        "--disable=W,C,R,wrong-import-order,import-outside-toplevel"
     ]
 
 }
