@@ -10,6 +10,8 @@ from .models import Movie
 # Blueprint (self) import
 from flask import Blueprint
 
+from movie_night import auth
+
 # Blueprint Configuration
 movies_bp = Blueprint(
     "movies_bp",
@@ -52,3 +54,15 @@ def del_movie():
     movie.delete()
     db.session.commit()
     return redirect(url_for('.user'))
+
+@movies_bp.route("/list_all/", methods=["GET"])
+@auth.utils.check_login
+def list_all():
+    movies = Movie.query.all()
+    users = []
+    for movie in movies:
+        usr_id = movie.user_id
+        usr = User.query.filter_by(_id=usr_id).first()
+        users.append(usr)
+    movies = zip(movies,users)
+    return render_template("list_all.html", movies=movies)

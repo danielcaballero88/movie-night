@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Movies List
+{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='styles.css')}}">
+{% endblock %}
+
+{% block content %}
+<h1>All movies:</h1>
+
+<div class="items-container">
+    <ul>
+        {% for movie,user in movies %}
+            <li class="item">
+                <p class="item-title">{{ movie.name }}</p>
+                <p class="item-user">{{ user.name }}</p>
+            </li>
+        {% endfor%}
+    </ul>
+</div>
+{% endblock %}

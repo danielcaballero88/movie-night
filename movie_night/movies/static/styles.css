@@ -1,0 +1,22 @@
+.items-container ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: fit-content;
+    min-width: 50%;
+}
+
+.item-title {
+    font-size: 1.0em;
+}
+
+.item-user {
+    font-size: 1.0em;
+    color: gray;
+}
