@@ -20,11 +20,11 @@ class DevConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
     TESTING = True
-    DATABASE_URI = os.environ.get('DEV_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI')
 
 class ProdConfig(Config):
     """ Production Config """
     FLASK_ENV = 'production'
     DEBUG = False
     TESTING = False
-    DATABASE_URI = os.environ.get('PROD_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URI')

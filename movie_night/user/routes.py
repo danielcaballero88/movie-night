@@ -1,8 +1,8 @@
 """ User pages """
-from . import user_bp
 from flask import current_app as app
 from flask import redirect, url_for, render_template
 from flask import session, flash, request
+from . import user_bp
 
 @user_bp.route("/", methods=["GET", "POST"])
 def user():
