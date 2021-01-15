@@ -1,11 +1,11 @@
 """ Flask configuration """
 
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-here_path = os.path.dirname(__file__)
-dotenv_path = os.path.join(here_path, '.env')
-load_dotenv(dotenv_path=dotenv_path)
+# here_path = os.path.dirname(__file__)
+# dotenv_path = os.path.join(here_path, '.env')
+# load_dotenv(dotenv_path=dotenv_path)
 
 class Config:
     """ Base Config """
@@ -19,12 +19,15 @@ class DevConfig(Config):
     """ Development Config """
     FLASK_ENV = 'development'
     DEBUG = True
-    TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI')
 
 class ProdConfig(Config):
     """ Production Config """
     FLASK_ENV = 'production'
     DEBUG = False
-    TESTING = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URI')
+
+config = {
+    'development': DevConfig,
+    'production': ProdConfig
+}

@@ -1,12 +1,13 @@
 """Initialize Flask app."""
 from flask import Flask
+from config import config
 
-def create_app():
+def create_app(config_name):
     """Create Flask application."""
     # Create app
     app = Flask(__name__, instance_relative_config=False)
     # Import configuration from config file
-    app.config.from_object("config.DevConfig")
+    app.config.from_object(config[config_name])
     # Initialize database
     from .database import db
     db.init_app(app)
