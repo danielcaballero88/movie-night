@@ -11,6 +11,7 @@ from .models import Movie
 from flask import Blueprint
 
 from movie_night import auth
+from movie_night.auth.utils import login_needed, logout_needed
 
 # Blueprint Configuration
 movies_bp = Blueprint(
@@ -21,16 +22,15 @@ movies_bp = Blueprint(
 )
 
 @movies_bp.route("/user/", methods=["GET"])
+@login_needed
 def user():
     """ User personal page """
-    if "username" not in session:
-        flash("Not logged in")
-        return redirect(url_for("home_bp.home"))
     usr_nm = session["username"]
     usr = User.query.filter_by(name=usr_nm).first()
     return render_template("user.html", user=usr)
 
 @movies_bp.route("/add_movie/", methods=["GET", "POST"])
+@login_needed
 def add_movie():
     """ Add movie form """
     if request.method == "GET":
@@ -46,6 +46,7 @@ def add_movie():
     return redirect(url_for('.user'))
 
 @movies_bp.route("/del_movie/", methods=["POST"])
+@login_needed
 def del_movie():
     movie_name = request.form["movie2del"]
     movie = Movie.query.filter_by(name=movie_name)
@@ -56,7 +57,7 @@ def del_movie():
     return redirect(url_for('.user'))
 
 @movies_bp.route("/list_all/", methods=["GET"])
-@auth.utils.check_login
+@login_needed
 def list_all():
     movies = Movie.query.all()
     users = []

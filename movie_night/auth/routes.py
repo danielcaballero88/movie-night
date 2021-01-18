@@ -8,6 +8,8 @@ from movie_night.database import db
 from .models import User
 # Blueprint (self) import
 from flask import Blueprint
+#
+from .utils import login_needed, logout_needed
 
 # Blueprint Configuration
 auth_bp = Blueprint(
@@ -18,10 +20,8 @@ auth_bp = Blueprint(
 )
 
 @auth_bp.route("/signup/", methods=["GET", "POST"])
+@logout_needed
 def signup():
-    if "username" in session:
-        flash(f"Already logged as {session['username']}")
-        return redirect(url_for("home_bp.home"))
     if request.method == "GET":
         return render_template("signup.html")
     if request.method == "POST":
@@ -35,10 +35,8 @@ def signup():
         return redirect(url_for("auth_bp.login"))
 
 @auth_bp.route("/login/", methods=["GET", "POST"])
+@logout_needed
 def login():
-    if "username" in session:
-        flash(f"Already logged as {session['username']}")
-        return redirect(url_for("home_bp.home"))
     if request.method == "GET":
         return render_template("login.html")
     # POST
