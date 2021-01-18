@@ -16,7 +16,7 @@ Movies List
         {% for movie,user in movies %}
             <li class="item">
                 <p class="item-title">{{ movie.name }}</p>
-                <p class="item-user">{{ user.name }}</p>
+                <p class="item-user">{{ user.username }}</p>
             </li>
         {% endfor%}
     </ul>

@@ -3,8 +3,10 @@
 from flask import current_app as app
 from flask import redirect, url_for, render_template
 from flask import session, flash, request
-# Database and Models imports
-from movie_night.database import db
+# Extensions
+from movie_night.extensions import db
+from flask_login import current_user
+# Models
 from movie_night.auth.models import User
 from .models import Movie
 # Blueprint (self) import
@@ -25,8 +27,7 @@ movies_bp = Blueprint(
 @login_needed
 def user():
     """ User personal page """
-    usr_nm = session["username"]
-    usr = User.query.filter_by(name=usr_nm).first()
+    usr = current_user
     return render_template("user.html", user=usr)
 
 @movies_bp.route("/add_movie/", methods=["GET", "POST"])
@@ -37,9 +38,8 @@ def add_movie():
         return render_template("add_movie.html")
     # POST
     mov_nm = request.form["moviename"]
-    usr_nm = session["username"]
-    usr = User.query.filter_by(name=usr_nm).first()
-    usr_id = usr.get_id()
+    usr = current_user
+    usr_id = usr._id
     new_movie = Movie(name=mov_nm, user_id=usr_id)
     db.session.add(new_movie)
     db.session.commit()
@@ -49,7 +49,7 @@ def add_movie():
 @login_needed
 def del_movie():
     movie_name = request.form["movie2del"]
-    movie = Movie.query.filter_by(name=movie_name)
+    movie = Movie.query.filter_by(username=movie_name)
     print(movie, type(movie))
     print(movie.first(), type(movie.first()))
     movie.delete()

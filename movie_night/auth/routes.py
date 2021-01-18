@@ -3,12 +3,14 @@
 from flask import current_app as app
 from flask import redirect, url_for, render_template
 from flask import request, session, flash
+# Login
+from flask_login import current_user, login_user, logout_user
 # Database
-from movie_night.database import db
+from movie_night.extensions import db
 # Models
 from .models import User
 # Forms
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 # Utils
 from .utils import login_needed, logout_needed
 # Blueprint (self)
@@ -23,61 +25,61 @@ auth_bp = Blueprint(
     static_folder="static"
 )
 
-@auth_bp.route("/signup/", methods=["GET", "POST"])
+@auth_bp.route("/register/", methods=["GET", "POST"])
 @logout_needed
-def signup():
+def register():
     """ Create an account """
+    frm = RegisterForm()
     if request.method == "GET":
-        return render_template("signup.html")
-    if request.method == "POST":
-        # get form data
-        username = request.form["username"]
-        userpass = request.form["userpass"]
-        new_usr = User(username, userpass)
-        db.session.add(new_usr)
+        return render_template("register.html", form=frm)
+    # POST
+    if frm.validate():
+        # Get form data
+        usrnm = frm.username.data
+        emads = frm.email.data
+        pswrd = frm.password.data
+        # Create new user
+        usr = User(username=usrnm, email=emads, password=pswrd)
+        db.session.add(usr)
         db.session.commit()
-        flash("Sign Up Success")
-        return redirect(url_for("auth_bp.login"))
+        flash("Registration Successful")
+        return redirect(url_for(".login"))
+    # Form invalid
+    flash("Form invalid")
+    return render_template("register.html", form=frm)
 
 @auth_bp.route("/login/", methods=["GET", "POST"])
 @logout_needed
 def login():
     """ Login to a user account """
-    form = LoginForm()
+    frm = LoginForm()
     if request.method == "GET":
-        return render_template("login.html", form=form)
+        return render_template("login.html", form=frm)
     #
     # POST
-    if form.validate():
-        # Prepare session
-        session.permanent = True
+    if frm.validate():
         # Get form data
-        username = form.username.data
-        password = form.password.data
-        remember = form.remember.data
+        usrnm = frm.username.data
+        pswrd = frm.password.data
+        rmmbr = frm.remember.data
         # Authenticate User
-        found_user = User.query.filter_by(name=username).first()
-        if not found_user:
-            flash("Not a user")
-            return redirect(url_for("auth_bp.login"))
-        if password != found_user.password:
-            flash("Wrong password")
-            return redirect(url_for("auth_bp.login"))
+        usr = User.query.filter_by(username=usrnm).first()
+        if not usr or not usr.check_password(pswrd):
+            flash("Not a user or wrong password")
+            return redirect(url_for(".login"))
         # else: Success
-        session["username"] = username
+        login_user(usr, remember=rmmbr)
         # Done
-        flash(f"Login Success for user {username}, remember={remember}")
+        flash(f"Login Success for user {usrnm}, remember={rmmbr}")
         return redirect(url_for("home_bp.home"))
     # INVALID FORM
     flash("Invalid form")
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', form=frm)
 
 @auth_bp.route("/logout/", methods=["GET", "POST"])
+@login_needed
 def logout():
-    if "username" in session:
-        username = session["username"]
-        flash(f"Logout successful, bye {username}!", "info")
-        session.pop("username", None)
-    else:
-        flash("No one to loggout ¬¬")
+    if current_user.is_authenticated:
+        logout_user()
+        flash("Logout success")
     return redirect(url_for("home_bp.home"))

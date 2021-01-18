@@ -1,7 +1,7 @@
 """ Models for user blueprint
 each model is something that a user can store or save """
 
-from movie_night.database import db
+from movie_night.extensions import db
 
 class Movie(db.Model):
     """ List of movies

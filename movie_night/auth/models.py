@@ -1,7 +1,10 @@
 """Models for user Blueprint"""
-from movie_night.database import db
+from movie_night.extensions import db
+from movie_night.extensions import login_manager
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     """ Data model for user accounts """
     # Table: name
     __tablename__ = "user"
@@ -11,26 +14,45 @@ class User(db.Model):
         db.Integer,
         primary_key=True
     )
-    # Field: name
-    name = db.Column(
-        db.String(100),
+    # Field: username
+    username = db.Column(
+        db.String(60),
         unique=True,
         nullable=False
     )
-    # Field: password
-    password = db.Column(
-        db.String(100),
+    # Field: email
+    email = db.Column(
+        db.String(120),
+        unique=True,
+        nullable=False
+    )
+    # Field: password_hash
+    password_hash = db.Column(
+        db.String(128),
         nullable=False
     )
     # Relationship: User pelis
     movies = db.relationship("Movie")
 
-    def __init__(self, name, password):
-        self.name = name
-        self.password = password
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.set_password(password)
 
-    def __str__(self):
-        return self.name
+    def __repr__(self):
+        return f'<User {self.username}>'
 
+    # I need to set this method because I named the pk field "_id"
+    # (if I had named it "id", it wasn't necessary because of UserMixin)
     def get_id(self):
-        return self._id
+        return str(self._id)
+
+    def set_password(self, pswrd):
+        self.password_hash = generate_password_hash(pswrd)
+
+    def check_password(self, pswrd):
+        return check_password_hash(self.password_hash, pswrd)
+
+@login_manager.user_loader
+def load_user(_id):
+    return User.query.get(int(_id))

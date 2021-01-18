@@ -7,18 +7,24 @@ Login Page
 {% block content %}
 <h1>Login</h1>
 <form action="" method="POST" novalidate>
+    <!-- Username -->
     {{ form.hidden_tag() }}
     <p>{{ form.username.label}}</p>
     <p>{{ form.username() }}</p>
     {% for error in form.username.errors %}
         <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <!-- Password -->
     <p>{{ form.password.label }}</p>
     <p>{{ form.password() }}</p>
     {% for error in form.password.errors %}
         <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <!-- Remember -->
     <p>{{ form.remember() }} {{ form.remember.label }}</p>
+    <!-- Submit -->
     <p>{{ form.submit() }}</p>
 </form>
+<!-- New users register link -->
+<p><a href='{{ url_for(".register") }}'>Register</a></p>
 {% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+Signup Page
+{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+<form action="" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    <!-- Username -->
+    <p>{{ form.username.label }}</p>
+    <p>{{ form.username() }}</p>
+    <ul>
+        {% for error in form.username.errors %}
+            <li><span style="color: red;">{{ error }}</span></li>
+        {% endfor %}
+    </ul>
+    <!-- Email -->
+    <p>{{ form.email.label }}</p>
+    <p>{{ form.email() }}</p>
+    <ul>
+        {% for error in form.email.errors %}
+            <li><span style="color: red;">{{ error }}</span></li>
+        {% endfor %}
+    </ul>
+    <!-- Password -->
+    <p>{{ form.password.label }}</p>
+    <p>{{ form.password() }}</p>
+    <ul>
+        {% for error in form.password.errors %}
+            <li><span style="color: red;">{{ error }}</span></li>
+        {% endfor %}
+    </ul>
+    <!-- Repeat Password -->
+    <p>{{ form.password2.label }}</p>
+    <p>{{ form.password2() }}</p>
+    <ul>
+        {% for error in form.password2.errors %}
+            <li><span style="color: red;">{{ error }}</span></li>
+        {% endfor %}
+    </ul>
+    <!-- Submit -->
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}
