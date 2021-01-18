@@ -6,7 +6,7 @@ from flask_login import current_user
 def login_needed(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
-        if not current_user.is_authenticated:
+        if current_user.is_anonymous:
             print("login_needed")
             flash("Login needed for that")
             return redirect(url_for("home_bp.home"))
