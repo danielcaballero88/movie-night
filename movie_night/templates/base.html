@@ -26,9 +26,11 @@
             {% block flashmessages %}
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
-                        {% for msg in messages %}
-                            <p>{{ msg }}</p>
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
                         {% endfor %}
+                    </ul>
                     {% endif %}
                 {% endwith %}
             {% endblock %}
