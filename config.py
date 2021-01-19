@@ -17,17 +17,21 @@ class Config:
 
 class DevConfig(Config):
     """ Development Config """
-    FLASK_ENV = 'development'
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI')
 
 class ProdConfig(Config):
     """ Production Config """
-    FLASK_ENV = 'production'
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URI')
 
+class HerokuConfig(Config):
+    """ Heroku Config """
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
 config = {
     'development': DevConfig,
-    'production': ProdConfig
+    'production': ProdConfig,
+    'heroku': HerokuConfig
 }

@@ -7,6 +7,7 @@ from config import config
 from .extensions import db # flask_sqlalchemy
 from .extensions import migrate #  flask_migrate
 from .extensions import login_manager # flask_login
+from . import errors
 
 def create_app(config_name):
     """Create Flask application."""
@@ -28,6 +29,9 @@ def create_app(config_name):
         app.register_blueprint(home_bp)
         app.register_blueprint(auth_bp)
         app.register_blueprint(movies_bp, url_prefix="/movies/")
+        # Register error pages
+        app.register_error_handler(404, errors.not_found_error)
+        app.register_error_handler(500, errors.internal_error)
         # Create/init database
         if False:
             # Commented out because it is a one time thing
