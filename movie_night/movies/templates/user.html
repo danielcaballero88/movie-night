@@ -12,9 +12,10 @@ User page
     <ul>
         {% for movie in user.movies %}
             <li>
-                <p>{{ movie.name }}</p>
+                <img src='{{ movie.cover_url }}'>
+                <p>{{ movie.title }} ({{ movie.year }})</p>
                 <form action="{{ url_for('.del_movie') }}" method="POST">
-                    <input type=hidden value="{{ movie.name }}" name="movie2del" />
+                    <input type=hidden value="{{ movie.title }}" name="title" />
                     <input type="submit" value="Del" />
                 </form>
             </li>

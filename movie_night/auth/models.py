@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     # Table: name
     __tablename__ = "user"
     # Field: Primary key
-    _id = db.Column(
+    id = db.Column(
         "id",
         db.Integer,
         primary_key=True
@@ -41,11 +41,6 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
-
-    # I need to set this method because I named the pk field "_id"
-    # (if I had named it "id", it wasn't necessary because of UserMixin)
-    def get_id(self):
-        return str(self._id)
 
     def set_password(self, pswrd):
         self.password_hash = generate_password_hash(pswrd)

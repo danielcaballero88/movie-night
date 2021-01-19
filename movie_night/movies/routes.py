@@ -11,9 +11,9 @@ from movie_night.auth.models import User
 from .models import Movie
 # Blueprint (self) import
 from flask import Blueprint
-
-from movie_night import auth
+# Utilities
 from movie_night.auth.utils import login_needed, logout_needed
+from movie_night.utils import ia
 
 # Blueprint Configuration
 movies_bp = Blueprint(
@@ -35,23 +35,27 @@ def user():
 def add_movie():
     """ Add movie form """
     if request.method == "GET":
-        return render_template("add_movie.html")
+        # Check if a title is already given
+        mvttl = request.args.get("title")
+        movies = ia.search_movie(mvttl) if mvttl else None
+        return render_template("add_movie.html", movies=movies)
     # POST
-    mov_nm = request.form["moviename"]
-    usr = current_user
-    usr_id = usr._id
-    new_movie = Movie(name=mov_nm, user_id=usr_id)
-    db.session.add(new_movie)
+    # Get movies imdb ids from the form
+    chkmvs = request.form.getlist("checkmovies")
+    # Create and add the objects to the database
+    for chkmv in chkmvs:
+        ttl, yr, imid, cvurl = chkmv.split(';')
+        movie = Movie(title=ttl, year=yr, imdb_id=imid, cover_url=cvurl, user_id=int(current_user.get_id()))
+        db.session.add(movie)
     db.session.commit()
+    flash(f"Movies added: {chkmvs}")
     return redirect(url_for('.user'))
 
 @movies_bp.route("/del_movie/", methods=["POST"])
 @login_needed
 def del_movie():
-    movie_name = request.form["movie2del"]
-    movie = Movie.query.filter_by(username=movie_name)
-    print(movie, type(movie))
-    print(movie.first(), type(movie.first()))
+    mvttl = request.form["title"]
+    movie = Movie.query.filter_by(title=mvttl)
     movie.delete()
     db.session.commit()
     return redirect(url_for('.user'))
@@ -63,7 +67,7 @@ def list_all():
     users = []
     for movie in movies:
         usr_id = movie.user_id
-        usr = User.query.filter_by(_id=usr_id).first()
+        usr = User.query.filter_by(id=usr_id).first()
         users.append(usr)
     movies = zip(movies,users)
     return render_template("list_all.html", movies=movies)

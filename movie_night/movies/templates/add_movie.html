@@ -1,6 +1,40 @@
-<h2>Add a movie?</h2>
-<form action='#' method='POST'>
-    <p><input type='text' name='moviename'></p>
-    <p><input type='submit' name='submit' value='Add'></p>
-</form>
-<p><a href='{{ url_for(".user") }}'>Go back</a></p>
+{% extends "base.html" %}
+
+{% block title %}
+Add movies
+{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='styles.css')}}">
+{% endblock %}
+
+{% block content %}
+    <h2>Search in IMDb:</h2>
+    <form action='' method='GET'>
+        <p><input type='text' name='title'></p>
+        <p><input type='submit' name='submit' value='Search'></p>
+    </form>
+
+    {% if movies %}
+        <h1>Movies matching the search:</h1>
+        <div class="items-container">
+            <form action='{{ url_for(".add_movie") }}' method='POST'>
+                <ul>
+                    {% for movie in movies %}
+                        <li class="item">
+                            <label class="item-title">
+                                <input
+                                    type="checkbox"
+                                    name="checkmovies"
+                                    value="{{ movie['title'] }};{{ movie['year'] }};{{ movie.movieID }};{{ movie['cover url'] }}"
+                                />
+                                {{ movie['title'] }} ({{ movie['year'] }}) - {{ movie.movieID }}
+                            </label>
+                        </li>
+                    {% endfor%}
+                </ul>
+                <input type="submit" value="Add"/>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

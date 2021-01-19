@@ -16,11 +16,29 @@ class Movie(db.Model):
         db.Integer,
         primary_key=True
     )
-    # Name field
-    name = db.Column(
-        db.String,
+    # Field: title
+    title = db.Column(
+        db.String(120),
         unique=True,
         nullable=False
+    )
+    # Field: year
+    year = db.Column(
+        db.Integer,
+        unique=False,
+        nullable=True
+    )
+    # Field: IMDb id
+    imdb_id = db.Column(
+        db.Integer,
+        unique=True,
+        nullable=True
+    )
+    # Field: cover_url
+    cover_url = db.Column(
+        db.String(240),
+        unique=False,
+        nullable=True
     )
     # User (parent) field: foreign key
     user_id = db.Column(
@@ -28,8 +46,11 @@ class Movie(db.Model):
         db.ForeignKey("user.id")
     )
 
-    def __init__(self, name, user_id):
-        self.name = name
+    def __init__(self, title, year, imdb_id, cover_url, user_id):
+        self.title = title
+        self.year = year
+        self.imdb_id = imdb_id
+        self.cover_url = cover_url
         self.user_id = user_id
 
     def __str__(self):

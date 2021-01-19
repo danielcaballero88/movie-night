@@ -2,7 +2,7 @@
 # Flask
 from flask import current_app as app
 from flask import redirect, url_for, render_template
-from flask import request, session, flash
+from flask import request, flash
 # Login
 from flask_login import current_user, login_user, logout_user
 # Database
