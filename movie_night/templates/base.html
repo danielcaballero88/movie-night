@@ -2,24 +2,41 @@
 <html>
     <head>
         <title>{% block title %}Base Title{% endblock %}</title>
+        <!--Bootstrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <!--My CSS-->
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
         {% block extra_styles %}
         {% endblock %}
     </head>
     <body>
         <!-- Navigation bar -->
-        <nav class="nav-bar">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/login/">Login</a></li>
-                <li><a href="/logout/">Logout</a></li>
-                <li><a href='{{ url_for("movies_bp.user") }}'>User</a></li>
-                <li><a href='{{ url_for("movies_bp.list_all") }}'>List</a></li>
-            </ul>
-            <ul>
-                <li><a href="/about/">About</a></li>
-                <li><a href="/contact/">Contact</a></li>
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Movie-Night</a>
+                <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav go-right">
+                        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="/login/">Login</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="/logout/">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link active" href='{{ url_for("movies_bp.user") }}'>User</a></li>
+                        <li class="nav-item"><a class="nav-link active" href='{{ url_for("movies_bp.list_all") }}'>List</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
+
+            </div>
         </nav>
         <main class="main-content">
             <!-- Display flash messages first, if any -->
@@ -38,5 +55,7 @@
             {% block content %}
             {% endblock %}
         </main>
+        <!--Bootstrap JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     </body>
 </html>

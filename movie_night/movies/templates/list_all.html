@@ -11,15 +11,18 @@ Movies List
 {% block content %}
 <h1>All movies:</h1>
 
-<div class="items-container">
-    <ul>
-        {% for movie,user in movies %}
-            <li class="item">
-                <img src='{{ movie.cover_url }}'>
-                <p class="item-title">{{ movie.title }} ({{ movie.year }})</p>
-                <p class="item-user">{{ user.username }}</p>
-            </li>
-        {% endfor%}
-    </ul>
+<div class="d-flex flex-column">
+    <div class="d-flex">
+        <ul class="list-group wide-list-group">
+            {% for movie,user in movies %}
+                <li class="list-group-item p-1">
+                    <div class="d-flex align-items-center del-button-container">
+                        <img class="list-group-item-thumb" src='{{ movie.cover_url }}'>
+                        <p class="list-group-item-title">{{ movie.title }} ({{ movie.year }})</p>
+                    </div>
+                </li>
+            {% endfor%}
+        </ul>
+    </div>
 </div>
 {% endblock %}

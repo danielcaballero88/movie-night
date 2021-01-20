@@ -9,32 +9,44 @@ Add movies
 {% endblock %}
 
 {% block content %}
-    <h2>Search in IMDb:</h2>
-    <form action='' method='GET'>
-        <p><input type='text' name='title'></p>
-        <p><input type='submit' name='submit' value='Search'></p>
-    </form>
 
-    {% if movies %}
-        <h1>Movies matching the search:</h1>
-        <div class="items-container">
-            <form action='{{ url_for(".add_movie") }}' method='POST'>
-                <ul>
-                    {% for movie in movies %}
-                        <li class="item">
-                            <label class="item-title">
-                                <input
-                                    type="checkbox"
-                                    name="checkmovies"
-                                    value="{{ movie['title'] }};{{ movie['year'] }};{{ movie.movieID }};{{ movie['cover url'] }}"
-                                />
-                                {{ movie['title'] }} ({{ movie['year'] }}) - {{ movie.movieID }}
-                            </label>
-                        </li>
-                    {% endfor%}
-                </ul>
-                <input type="submit" value="Add"/>
-            </form>
-        </div>
-    {% endif %}
+    <div class="container-fluid mt-2">
+        <form class="d-flex m-1" action='' method='GET'>
+        <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search IMDb"
+        aria-label="Search"
+        name="title">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        {% if movies %}
+        <form action='{{ url_for(".add_movie") }}' method='POST'>
+            <div class="d-flex flex-column m-1">
+                <div class="d-flex">
+                    <ul class="list-group wide-list-group">
+                        {% for movie in movies %}
+                            <li class="list-group-item p-1">
+                                <label>
+                                    <div class="d-flex align-items-center p-0">
+                                        <input
+                                        class="form-check-input me-1"
+                                        type="checkbox"
+                                        name="checkmovies"
+                                        value="{{ movie['title'] }};{{ movie['year'] }};{{ movie.movieID }};{{ movie['cover url'] }}"
+                                        aria-label="...">
+                                        <img class="list-group-item-thumb" src='{{ movie["cover url"] }}'>
+                                        <p class="list-group-item-title">{{ movie.title }} ({{ movie.year }})</p>
+                                    </div>
+                                </label>
+                            </li>
+                        {% endfor%}
+                    </ul>
+                </div>
+                <input class="btn btn-primary mt-1" type="submit" value="Add"/>
+            </div>
+        </form>
+        {% endif %}
+    </div>
 {% endblock %}
