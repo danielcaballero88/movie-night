@@ -13,7 +13,7 @@ from .models import Movie
 from flask import Blueprint
 # Utilities
 from movie_night.auth.utils import login_needed, logout_needed
-from movie_night.utils import ia
+from .utils.imdb_api import ia
 
 # Blueprint Configuration
 movies_bp = Blueprint(
